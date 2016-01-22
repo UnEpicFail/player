@@ -1,0 +1,10 @@
+{
+  "access_token" : "",
+  "server_url" : "https://api.vk.com/method/",
+  "actions": {
+    "search": {
+      "name": "Поиск",
+      "action": "audio.search"
+    }
+  }
+}
