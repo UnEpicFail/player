@@ -1,0 +1,17 @@
+#list li:hover{
+  cursor: pointer;
+}
+
+#list ul,
+#list li{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#list li{
+  border-bottom: 1px solid #666;
+  white-space: nowrap;
+  overflow: hidden;
+  height: 22px;
+}

@@ -14,11 +14,16 @@ var app = {
 
     $('#searchForm').on('submit',function(e){
       e.preventDefault();
-
+      var count = $('input[type="hidden"][name="count"]').val()
       $.get(settings.server_url+settings.actions.search.action+'?'+$(this).serialize())
       .success(function(res){
-        console.log('success',res);
-        $('#list').html(Mustache.render($('#listTpl').html(), res));
+        // console.log('success',res);
+        if(res.response.length - 1 === 100 ){
+          var offset = parseInt($('input[type="hidden"][name="offset"]').val(), 10);
+          $('input[type="hidden"][name="offset"]').val((offset+1) * count);
+        }
+
+        $('#list ul').append(Mustache.render($('#listTpl').html(), res));
       })
       .error(function(res){
         console.log('error',res);
