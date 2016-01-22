@@ -8,28 +8,31 @@
       window.Mustache = require('./libs/mustache.js');
       require('./index.js');
     </script>
+    <link href="./index.css" rel="stylesheet">
   </head>
   <body>
     <div id="MAIN_DIV">
       <form id="searchForm">
         <input type="hidden" name="access_token">
+        <input type="hidden" name="count" value="100">
+        <input type="hidden" name="offset" value="0">
         <input name="q" placeholder="Введите название">
         <input type="submit" name="Искать">
       </form>
       <div id="player"></div>
       <div id="list">
+        <ul>
+        </ul>
       </div>
     </div>
     <script type="template/text" id="listTpl">
-      <ul>
-        {{#response}}
-          {{#artist}}
-            <li link="{{url}}">
-              {{artist}} | {{title}}
-            </li>
-          {{/artist}}
-        {{/response}}
-      </ul>
+      {{#response}}
+        {{#artist}}
+          <li link="{{url}}" title="{{artist}} | {{title}}">
+            {{artist}} | {{title}}
+          </li>
+        {{/artist}}
+      {{/response}}
     </script
   </body>
 </html>
