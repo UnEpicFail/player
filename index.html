@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Player</title>
+
     <script src="./libs/react.js"></script>
     <script src="./libs/react-dom.js"></script>
 
@@ -11,38 +12,9 @@
   <body>
     <div id = 'searchForm'>
     </div>
-    <!-- <div id="MAIN_DIV">
-      <form id="searchForm">
-        <input type="hidden" name="access_token">
-        <input type="hidden" name="count" value="100">
-        <input type="hidden" name="offset" value="0">
-        <input name="q" placeholder="Введите название">
-        <input type="submit" name="Искать">
-      </form>
-      <div id="player"></div>
-      <div id="list">
-        <ul>
-        </ul>
-      </div>
-    </div>
-    <template type="template/text" id="listTpl">
-      {{#response}}
-        {{#artist}}
-          <li link="{{url}}" title="{{artist}} | {{title}}">
-            {{artist}} | {{title}}
-          </li>
-        {{/artist}}
-      {{/response}}
-    </template> -->
+
     <script>
-      //window.$ = window.jQuery = require('./libs/jq.js');
-      // window.Mustache = require('./libs/mustache.js');
-      // require('./index.js');
-      // window.React = require ('./libs/react.min.js'>);
-      // window.ReactDOM = require ('./libs/react-dom.min.js');
-
-          require ('./build/searchForm.js');
-
+      require ('./build/searchForm.js');
     </script>
   </body>
 </html>
