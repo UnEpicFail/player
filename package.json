@@ -1,9 +1,12 @@
 {
-  "name"    : "player",
-  "version" : "0.0.1",
-  "main"    : "main.js",
-  "dependencies"  : {
-    "electron"    : "^0.4.1",
-    "electron-prebuilt": "^0.36.4"
+  "name": "player",
+  "version": "0.0.1",
+  "main": "main.js",
+  "dependencies": {
+    "babel-cli": "^6.4.5",
+    "babel-preset-react": "^6.3.13",
+    "electron": "^0.4.1",
+    "electron-prebuilt": "^0.36.4",
+    "gulp": "^3.9.0"
   }
 }

@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>Player</title>
-    <script>
-      window.$ = window.jQuery = require('./libs/jq.js');
-      window.Mustache = require('./libs/mustache.js');
-      require('./index.js');
-    </script>
+    <script src="./libs/react.js"></script>
+    <script src="./libs/react-dom.js"></script>
+
     <link href="./index.css" rel="stylesheet">
   </head>
   <body>
-    <div id="MAIN_DIV">
+    <div id = 'searchForm'>
+    </div>
+    <!-- <div id="MAIN_DIV">
       <form id="searchForm">
         <input type="hidden" name="access_token">
         <input type="hidden" name="count" value="100">
@@ -25,7 +25,7 @@
         </ul>
       </div>
     </div>
-    <script type="template/text" id="listTpl">
+    <template type="template/text" id="listTpl">
       {{#response}}
         {{#artist}}
           <li link="{{url}}" title="{{artist}} | {{title}}">
@@ -33,6 +33,16 @@
           </li>
         {{/artist}}
       {{/response}}
-    </script
+    </template> -->
+    <script>
+      //window.$ = window.jQuery = require('./libs/jq.js');
+      // window.Mustache = require('./libs/mustache.js');
+      // require('./index.js');
+      // window.React = require ('./libs/react.min.js'>);
+      // window.ReactDOM = require ('./libs/react-dom.min.js');
+
+          require ('./build/searchForm.js');
+
+    </script>
   </body>
 </html>
