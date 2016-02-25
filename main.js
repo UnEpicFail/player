@@ -3,6 +3,7 @@
 const app = require('app');
 const BrowserWindow = require('browser-window');
 const fs = require('fs');
+var globalShortcut = require('global-shortcut');
 
 var config = {};
 try {
@@ -27,6 +28,25 @@ app.on('ready', function() {
   mainWindow = new BrowserWindow({width:1200, height:600});
   //mainWindow.process.config = config;
   mainWindow.loadUrl('file://' + __dirname + '/index.html');
+  let retStop = globalShortcut.register('ctrl+k', function() {
+    mainWindow.webContents.send('STOP');
+  })
+  if (!retStop) console.log('registerion ctrl+k fails');
+
+  let retPause = globalShortcut.register('ctrl+l', function() {
+    mainWindow.webContents.send('PAUSE');
+  })
+  if (!retPause) console.log('registerion ctrl+l fails');
+
+  let retNext = globalShortcut.register('ctrl+]', function() {
+    mainWindow.webContents.send('NEXT');
+  })
+  if (!retNext) console.log('registerion ctrl+] fails');
+
+  let retPrew = globalShortcut.register('ctrl+[', function() {
+    mainWindow.webContents.send('PREW');
+  })
+  if (!retPrew) console.log('registerion ctrl+[ fails');
 
   if(config.debug){
     mainWindow.webContents.openDevTools();

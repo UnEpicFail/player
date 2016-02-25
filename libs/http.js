@@ -50,7 +50,13 @@ window.http = function(){
     try {
       if (h.readyState == 4) {
         if (h.status == 200) {
-          successFn(h);
+          var resp = h.response;
+          try {
+            resp = JSON.parse(resp);
+          } catch (e) {
+            console.warn('Response not JSON '+e);
+          }
+          successFn(resp);
         } else {
           errorFn(h.status, h.statusText);
         }

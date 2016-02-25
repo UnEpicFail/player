@@ -16,9 +16,23 @@
   <body>
     <div id = 'searchForm'>
     </div>
+    <div id = 'player'>
+    </div>
+    <div id = 'playList'>
+    </div>
 
     <script>
       require ('./build/searchForm.js');
+      require('ipc').on('STOP',function(){
+        console.log('GLOBAL EVENT STOP')
+      }).on('PAUSE',function(){
+        console.log('GLOBAL EVENT PAUSE')
+      }).on('NEXT',function(){
+        console.log('GLOBAL EVENT NEXT')
+      }).on('PREW',function(){
+        console.log('GLOBAL EVENT PREW')
+      })
+
     </script>
   </body>
 </html>
