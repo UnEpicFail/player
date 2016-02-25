@@ -1,5 +1,5 @@
 var SearchForm = React.createClass({
-  displayName: "SearchForm",
+  displayName: 'SearchForm',
 
 
   getData: function () {
@@ -8,16 +8,14 @@ var SearchForm = React.createClass({
       throw new Error("Empty search string");
     }
     //console.log(_config.server_url + _config.actions.search.action);
-    http.get(_config.server_url + _config.actions.search.action,{
+    http.post(_config.server_url + _config.actions.search.action, {
       q: searchStr,
       access_token: _config.access_token
-    })
-    .success(function(){
+    }).success(function () {
       console.log('success', arguments);
-    })
-    .error(function(){
+    }).error(function () {
       console.log('error', srgumetns);
-    })
+    });
     //(settings.server_url+settings.actions.search.action+'?q='+searchStr);
     //ReactDOM.render(<PlayList />, document.getElementById('list'));
   },
@@ -32,27 +30,27 @@ var SearchForm = React.createClass({
 
   render: function () {
     return React.createElement(
-      "div",
+      'div',
       null,
-      React.createElement("input", {
-        placeholder: "Введите название",
+      React.createElement('input', {
+        placeholder: 'Введите название',
         value: this.searchStr,
         onChange: this.handleSearchChange
       }),
-      React.createElement("input", { type: "submit", name: "Искать", onClick: this.getData }),
-      React.createElement("div", { id: "list" })
+      React.createElement('input', { type: 'submit', name: 'Искать', onClick: this.getData }),
+      React.createElement('div', { id: 'list' })
     );
   }
 });
 
 var PlayList = React.createClass({
-  displayName: "PlayList",
+  displayName: 'PlayList',
 
   render: function () {
     return React.createElement(
-      "div",
+      'div',
       null,
-      "!!!!"
+      '!!!!'
     );
   }
 });

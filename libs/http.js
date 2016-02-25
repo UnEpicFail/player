@@ -70,7 +70,7 @@ window.http = function(){
       return request('GET', url, null, !(sinc));
     },
     post:function(url, data, sinc){
-      return request('POST', url, (data || {}), !(sinc));
+      return request('POST', url, JSON.stringify(data || {}), !(sinc));
     }
   }
 }()

@@ -2,10 +2,20 @@ var SearchForm = React.createClass({
 
   getData: function(){
     var searchStr = this.state.searchStr.trim();
-    if(searchStr.length === 0){
+    if (searchStr.length === 0) {
       throw new Error("Empty search string");
     }
-    console.log(settings.server_url+settings.actions.search.action);
+    //console.log(_config.server_url + _config.actions.search.action);
+    http.post(_config.server_url + _config.actions.search.action,{
+      q: searchStr,
+      access_token: _config.access_token
+    })
+    .success(function(){
+      console.log('success', arguments);
+    })
+    .error(function(){
+      console.log('error', srgumetns);
+    })
     //(settings.server_url+settings.actions.search.action+'?q='+searchStr);
     //ReactDOM.render(<PlayList />, document.getElementById('list'));
   },
