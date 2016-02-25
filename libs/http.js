@@ -48,11 +48,11 @@ window.http = function(){
   };
   var onStateChange = function(){
     try {
-      if (req.readyState == 4) {
-        if (req.status == 200) {
-          successFn(req);
+      if (h.readyState == 4) {
+        if (h.status == 200) {
+          successFn(h);
         } else {
-          errorFn(req.status, req.statusText);
+          errorFn(h.status, h.statusText);
         }
       }
     } catch( e ) {
@@ -62,10 +62,15 @@ window.http = function(){
 
   return {
     get:function(url, data, sinc){
-      return request('GET', url, (data || {}), !!(sinc));
+      var data = (data || {});
+      url+='?'
+      for(var i in data){
+        url+=i+'='+data[i]+'&';
+      }
+      return request('GET', url, null, !(sinc));
     },
     post:function(url, data, sinc){
-      return request('POST', url, (data || {}), !!(sinc));
+      return request('POST', url, (data || {}), !(sinc));
     }
   }
 }()

@@ -1,15 +1,31 @@
 var SearchForm = React.createClass({
 
   getData: function(){
+    var searchStr = this.state.searchStr.trim();
+    if(searchStr.length === 0){
+      throw new Error("Empty search string");
+    }
+    console.log(settings.server_url+settings.actions.search.action);
+    //(settings.server_url+settings.actions.search.action+'?q='+searchStr);
+    //ReactDOM.render(<PlayList />, document.getElementById('list'));
+  },
 
+  getInitialState: function() {
+    return {searchStr: ''};
+  },
 
-    ReactDOM.render(<PlayList />, document.getElementById('list'));
+  handleSearchChange: function(e){
+    this.setState({searchStr: e.target.value});
   },
 
   render: function(){
     return(
       <div>
-        <input name="q" placeholder="Введите название" />
+        <input
+          placeholder="Введите название"
+          value={this.searchStr}
+          onChange={this.handleSearchChange}
+          />
         <input type="submit" name="Искать" onClick={this.getData} />
         <div id="list">
         </div>

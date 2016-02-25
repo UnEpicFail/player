@@ -3,7 +3,11 @@
   <head>
     <meta charset="utf-8">
     <title>Player</title>
-
+    <script>
+      const _config = require('./config.json');
+      if(!_config) throw new Error('no config');
+    </script>
+    <script src="./libs/http.js"></script>
     <script src="./libs/react.js"></script>
     <script src="./libs/react-dom.js"></script>
 
