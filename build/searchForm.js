@@ -38,17 +38,24 @@ var Song = React.createClass({
   },
   render: function () {
     var song = this.props.song,
-        index = this.props.index;
+        index = this.props.index,
+        hh = Math.floor(song.duration / 60),
+        mm = song.duration % 60;
 
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
     return React.createElement(
       "li",
       null,
-      React.createElement("input", { type: "button", onClick: this.select, value: ">" }),
+      React.createElement("input", { type: "button", onClick: this.select, value: !this.props.active ? '>' : '||' }),
       " ",
       index,
       " | ",
-      Math.round(song.duration / 6) / 10,
-      "  | ",
+      hh,
+      ":",
+      mm,
+      " | ",
       song.title
     );
   }
@@ -73,14 +80,14 @@ var Player = React.createClass({
   },
 
   setUrl: function (url, index) {
-    console.log(url, index);
     this.setState({
       url: url,
-      active: index
+      active: index,
+      action: 'play'
     });
-    setTimeout(function () {
-      document.getElementsByTagName('audio')[0].play();
-    }, 500);
+    // setTimeout(function(){
+    //     document.getElementsByTagName('audio')[0].play();
+    // },500);
   },
 
   changeSearch: function (string) {
@@ -109,7 +116,7 @@ var Player = React.createClass({
   doStop: function () {
     console.log('doStop');
     this.setState({ action: 'stop' });
-    document.getElementsByTagName('audio')[0].pause();
+    // document.getElementsByTagName('audio')[0].pause();
   },
 
   doPause: function () {
@@ -121,17 +128,17 @@ var Player = React.createClass({
         } else {
           this.setState({
             url: this.state.list[0].url,
-            active: 0
+            active: 0,
+            action: 'play'
           });
         }
+      } else {
+        this.setState({
+          action: 'play'
+        });
       }
-      this.setState({ action: 'play' });
-      setTimeout(function () {
-        document.getElementsByTagName('audio')[0].play();
-      }, 500);
     } else {
       this.setState({ action: 'pause' });
-      document.getElementsByTagName('audio')[0].pause();
     }
   },
 
@@ -146,18 +153,16 @@ var Player = React.createClass({
       }
     } else {
       next = this.state.active + 1;
-      if (next == this.state.length) {
+      if (next == this.state.list.length) {
         next = 0;
       }
     }
+
     this.setState({
       url: this.state.list[next].url,
       active: next,
       action: 'play'
     });
-    setTimeout(function () {
-      document.getElementsByTagName('audio')[0].play();
-    }, 500);
   },
 
   doPrev: function () {
@@ -180,9 +185,6 @@ var Player = React.createClass({
       active: prev,
       action: 'play'
     });
-    setTimeout(function () {
-      document.getElementsByTagName('audio')[0].play();
-    }, 500);
   },
 
   addListeners: function () {
@@ -199,13 +201,13 @@ var Player = React.createClass({
     return React.createElement(
       "div",
       null,
-      React.createElement(Audio, { url: this.state.url, onEnded: this.doNext }),
+      React.createElement(Audio, { url: this.state.url, onEnded: this.doNext, action: this.state.action }),
       React.createElement(SearchForm, { onChange: this.changeSearch, searchStr: this.state.searchStr }),
       React.createElement(
         "ul",
         null,
         list.map((song, index) => {
-          return React.createElement(Song, { song: song, key: index, onSelect: this.setUrl, index: index });
+          return React.createElement(Song, { song: song, key: index, onSelect: this.setUrl, index: index, active: index == this.state.active });
         })
       )
     );
@@ -215,10 +217,25 @@ var Player = React.createClass({
 var Audio = React.createClass({
   displayName: "Audio",
 
-
+  componentDidMount: function () {
+    this.refs.audioElement.addEventListener('ended', this.props.onEnded);
+  },
+  componentWillUnmount: function () {
+    this.refs.audioElement.removeEventListener('ended', this.props.onEndeds);
+  },
+  componentWillReceiveProps: function (props) {
+    console.log('props', props);
+    var action = props.action;
+    if (action == 'stop' || action == 'pause') {
+      this.refs.audioElement.pause();
+    } else {
+      setTimeout(() => {
+        this.refs.audioElement.play();
+      });
+    }
+  },
   render: function () {
-    console.log('this.props.onEnded', this.props.onEnded);
-    return React.createElement("audio", { src: this.props.url, onended: this.props.onEnded });
+    return React.createElement("audio", { src: this.props.url, ref: "audioElement" });
   }
 });
 
