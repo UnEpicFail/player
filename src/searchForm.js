@@ -39,7 +39,7 @@ var Song = React.createClass({
     return (
       <li>
         <input type="button" onClick = {this.select} value = '>' />
-        {index} | {song.title}
+        &nbsp;{index} | { Math.round(song.duration / 6) / 10 }  | {song.title}
       </li>
     )
   }
@@ -155,24 +155,24 @@ var Player = React.createClass({
     }, 500)
   },
 
-  doPrew:function(){
-    console.log('doPrew')
-    var prew;
+  doPrev:function(){
+    console.log('doPrev')
+    var prev;
     if(this.state.active == -1){
       if(this.state.list.length == 0){
         return true;
       } else {
-        prew = this.state.list.length - 1
+        prev = this.state.list.length - 1
       }
     } else {
-      prew = this.state.active - 1;
-      if(prew == -1){
-        prew = this.state.list.length - 1;
+      prev = this.state.active - 1;
+      if(prev == -1){
+        prev = this.state.list.length - 1;
       }
     }
     this.setState({
-      url:this.state.list[prew].url,
-      active: prew,
+      url:this.state.list[prev].url,
+      active: prev,
       action: 'play'
     })
     setTimeout(function(){
@@ -185,7 +185,7 @@ var Player = React.createClass({
     element.addEventListener('STOP', this.doStop);
     element.addEventListener('PAUSE', this.doPause);
     element.addEventListener('NEXT', this.doNext);
-    element.addEventListener('PREW', this.doPrew);
+    element.addEventListener('PREV', this.doPrev);
   },
 
   render: function() {
@@ -193,7 +193,7 @@ var Player = React.createClass({
     var list = this.state.list
     return (
       <div>
-        <Audio url = {this.state.url} />
+        <Audio url = {this.state.url} onEnded = {this.doNext}/>
 
         <SearchForm onChange = {this.changeSearch} searchStr = {this.state.searchStr} />
 
@@ -210,9 +210,9 @@ var Player = React.createClass({
 var Audio = React.createClass({
 
   render: function(){
-
+    console.log('this.props.onEnded',this.props.onEnded);
     return (
-      <audio src={this.props.url} ></audio>
+      <audio src={this.props.url} onended={this.props.onEnded}></audio>
     )
   }
 });

@@ -44,8 +44,11 @@ var Song = React.createClass({
       "li",
       null,
       React.createElement("input", { type: "button", onClick: this.select, value: ">" }),
+      " ",
       index,
       " | ",
+      Math.round(song.duration / 6) / 10,
+      "  | ",
       song.title
     );
   }
@@ -157,24 +160,24 @@ var Player = React.createClass({
     }, 500);
   },
 
-  doPrew: function () {
-    console.log('doPrew');
-    var prew;
+  doPrev: function () {
+    console.log('doPrev');
+    var prev;
     if (this.state.active == -1) {
       if (this.state.list.length == 0) {
         return true;
       } else {
-        prew = this.state.list.length - 1;
+        prev = this.state.list.length - 1;
       }
     } else {
-      prew = this.state.active - 1;
-      if (prew == -1) {
-        prew = this.state.list.length - 1;
+      prev = this.state.active - 1;
+      if (prev == -1) {
+        prev = this.state.list.length - 1;
       }
     }
     this.setState({
-      url: this.state.list[prew].url,
-      active: prew,
+      url: this.state.list[prev].url,
+      active: prev,
       action: 'play'
     });
     setTimeout(function () {
@@ -187,7 +190,7 @@ var Player = React.createClass({
     element.addEventListener('STOP', this.doStop);
     element.addEventListener('PAUSE', this.doPause);
     element.addEventListener('NEXT', this.doNext);
-    element.addEventListener('PREW', this.doPrew);
+    element.addEventListener('PREV', this.doPrev);
   },
 
   render: function () {
@@ -196,7 +199,7 @@ var Player = React.createClass({
     return React.createElement(
       "div",
       null,
-      React.createElement(Audio, { url: this.state.url }),
+      React.createElement(Audio, { url: this.state.url, onEnded: this.doNext }),
       React.createElement(SearchForm, { onChange: this.changeSearch, searchStr: this.state.searchStr }),
       React.createElement(
         "ul",
@@ -214,8 +217,8 @@ var Audio = React.createClass({
 
 
   render: function () {
-
-    return React.createElement("audio", { src: this.props.url });
+    console.log('this.props.onEnded', this.props.onEnded);
+    return React.createElement("audio", { src: this.props.url, onended: this.props.onEnded });
   }
 });
 

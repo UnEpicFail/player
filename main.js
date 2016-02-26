@@ -43,10 +43,10 @@ app.on('ready', function() {
   })
   if (!retNext) console.log('registerion ctrl+] fails');
 
-  let retPrew = globalShortcut.register('ctrl+[', function() {
-    mainWindow.webContents.send('PREW');
+  let retPrev = globalShortcut.register('ctrl+[', function() {
+    mainWindow.webContents.send('PREV');
   })
-  if (!retPrew) console.log('registerion ctrl+[ fails');
+  if (!retPrev) console.log('registerion ctrl+[ fails');
 
   if(config.debug){
     mainWindow.webContents.openDevTools();
