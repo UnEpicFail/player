@@ -1,30 +1,10 @@
 var SearchForm = React.createClass({
-  displayName: 'SearchForm',
+  displayName: "SearchForm",
 
-
-  getData: function () {
-    var searchStr = this.state.searchStr.trim();
-
-    if (searchStr.length === 0) {
-      throw new Error("Empty search string");
-    }
-    //console.log(_config.server_url + _config.actions.search.action);
-    http.get(_config.server_url + _config.actions.search.action, {
-      q: searchStr,
-      access_token: _config.access_token
-    }).success(function (resp) {
-      if (resp.error) throw new Error(resp.error.error_code + ' ' + resp.error.error_msg);
-
-      setList(resp.response.slice(1));
-    }).error(function () {
-      console.log('error', arguments);
-    });
-  },
 
   getInitialState: function () {
     return {
-      searchStr: 'Miracle of Sound',
-      list: []
+      searchStr: this.props.searchStr
     };
   },
 
@@ -32,55 +12,54 @@ var SearchForm = React.createClass({
     this.setState({ searchStr: e.target.value });
   },
 
-  setList: function (list) {
-    this.setState({ list: list });
+  callOnChange: function () {
+    this.props.onChange(this.state.searchStr);
   },
 
   render: function () {
     return React.createElement(
-      'div',
+      "div",
       null,
-      React.createElement('input', {
-        placeholder: 'Введите название',
+      React.createElement("input", {
+        placeholder: "Введите название",
         value: this.state.searchStr,
         onChange: this.handleSearchChange
       }),
-      React.createElement('input', { type: 'submit', name: 'Искать', onClick: this.getData }),
-      React.createElement(PlayList, { list: this.state.list })
+      React.createElement("input", { type: "submit", name: "Искать", onClick: this.callOnChange })
     );
   }
 });
 
 var Song = React.createClass({
-  displayName: 'Song',
+  displayName: "Song",
 
   render: function () {
     var song = this.props.song,
         index = this.props.index;
 
     return React.createElement(
-      'li',
+      "li",
       null,
       index,
-      ' | ',
+      " | ",
       song.title
     );
   }
 });
 
 var PlayList = React.createClass({
-  displayName: 'PlayList',
+  displayName: "PlayList",
 
   render: function () {
     var list = this.props.list;
 
     return React.createElement(
-      'div',
+      "div",
       null,
       React.createElement(
-        'ul',
+        "ul",
         null,
-        list.map(function (song, index) {
+        list.map((song, index) => {
           return React.createElement(Song, { song: song, key: index, index: index });
         })
       )
@@ -88,13 +67,74 @@ var PlayList = React.createClass({
   }
 });
 
-// var Player = React.createClass({
-//   render: function(
-//     <audio controls="controls">
-//       <source src="{this.props.url}" type="audio/mpeg">
-//     </audio>
-//   )
-// });
+var Player = React.createClass({
+  displayName: "Player",
 
-ReactDOM.render(React.createElement(SearchForm, null), document.getElementById('searchForm'));
-//ReactDOM.render(<PlayList />, document.getElementById('playList'));
+
+  getInitialState: () => {
+    return {
+      searchStr: 'Miracle of Sound',
+      list: [],
+      url: '',
+      state: 'stop'
+    };
+  },
+
+  setList: function (list) {
+    this.setState({ list: list });
+  },
+
+  changeSearch: function (string) {
+    this.setState({ searchStr: string });
+    this.getData(string);
+  },
+
+  getData: function (searchStr) {
+
+    if (searchStr.length === 0) {
+      throw new Error("Empty search string");
+    }
+
+    http.get(_config.server_url + _config.actions.search.action, {
+      q: searchStr,
+      access_token: _config.access_token
+    }).success(resp => {
+      if (resp.error) throw new Error(resp.error.error_code + ' ' + resp.error.error_msg);
+
+      this.setList(resp.response.slice(1));
+    }).error(() => {
+      console.log('error', arguments);
+    });
+  },
+  doStop: function () {
+    console.log('doStop');
+  },
+  doPause: function () {
+    console.log('doPause');
+  },
+  doNext: function () {
+    console.log('doNext');
+  },
+  doPrew: function () {
+    console.log('doPrew');
+  },
+  addListeners: function () {
+    var element = document.getElementsByTagName('body')[0];
+    console.log(this.doStop);
+    element.addEventListener('STOP', this.doStop);
+    element.addEventListener('PAUSE', this.doPause);
+    element.addEventListener('NEXT', this.doNext);
+    element.addEventListener('PREW', this.doPrew);
+  },
+  render: function () {
+    this.addListeners();
+    return React.createElement(
+      "div",
+      null,
+      React.createElement(SearchForm, { onChange: this.changeSearch, searchStr: this.state.searchStr }),
+      React.createElement(PlayList, { list: this.state.list })
+    );
+  }
+});
+
+ReactDOM.render(React.createElement(Player, null), document.getElementById('player'));

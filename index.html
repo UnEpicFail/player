@@ -8,6 +8,7 @@
       if(!_config) throw new Error('no config');
     </script>
     <script src="./libs/http.js"></script>
+    <script src="./libs/event.js"></script>
     <script src="./libs/react.js"></script>
     <script src="./libs/react-dom.js"></script>
 
@@ -25,12 +26,16 @@
       require ('./build/searchForm.js');
       require('ipc').on('STOP',function(){
         console.log('GLOBAL EVENT STOP')
+        callEvent('STOP', document.getElementsByTagName('body')[0]);
       }).on('PAUSE',function(){
         console.log('GLOBAL EVENT PAUSE')
+        callEvent('PAUSE', document.getElementsByTagName('body')[0]);
       }).on('NEXT',function(){
         console.log('GLOBAL EVENT NEXT')
+        callEvent('NEXT', document.getElementsByTagName('body')[0]);
       }).on('PREW',function(){
         console.log('GLOBAL EVENT PREW')
+        callEvent('PREW', document.getElementsByTagName('body')[0]);
       })
 
     </script>
