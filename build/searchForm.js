@@ -33,6 +33,9 @@ var SearchForm = React.createClass({
 var Song = React.createClass({
   displayName: "Song",
 
+  select: function (e) {
+    this.props.onSelect(e.target.src);
+  },
   render: function () {
     var song = this.props.song,
         index = this.props.index;
@@ -40,29 +43,10 @@ var Song = React.createClass({
     return React.createElement(
       "li",
       null,
+      React.createElement("input", { type: "button", onClick: this.select, src: song.url, value: ">" }),
       index,
       " | ",
       song.title
-    );
-  }
-});
-
-var PlayList = React.createClass({
-  displayName: "PlayList",
-
-  render: function () {
-    var list = this.props.list;
-
-    return React.createElement(
-      "div",
-      null,
-      React.createElement(
-        "ul",
-        null,
-        list.map((song, index) => {
-          return React.createElement(Song, { song: song, key: index, index: index });
-        })
-      )
     );
   }
 });
@@ -82,6 +66,13 @@ var Player = React.createClass({
 
   setList: function (list) {
     this.setState({ list: list });
+  },
+
+  setUrl: function (url) {
+    this.setState({ url: url });
+    setTimeout(function () {
+      document.getElementsByTagName('audio')[0].play();
+    }, 500);
   },
 
   changeSearch: function (string) {
@@ -108,9 +99,11 @@ var Player = React.createClass({
   },
   doStop: function () {
     console.log('doStop');
+    document.getElementsByTagName('audio')[0].pause();
   },
   doPause: function () {
     console.log('doPause');
+    document.getElementsByTagName('audio')[0].play();
   },
   doNext: function () {
     console.log('doNext');
@@ -120,7 +113,6 @@ var Player = React.createClass({
   },
   addListeners: function () {
     var element = document.getElementsByTagName('body')[0];
-    console.log(this.doStop);
     element.addEventListener('STOP', this.doStop);
     element.addEventListener('PAUSE', this.doPause);
     element.addEventListener('NEXT', this.doNext);
@@ -128,12 +120,30 @@ var Player = React.createClass({
   },
   render: function () {
     this.addListeners();
+    var list = this.state.list;
     return React.createElement(
       "div",
       null,
+      React.createElement(Audio, { url: this.state.url }),
       React.createElement(SearchForm, { onChange: this.changeSearch, searchStr: this.state.searchStr }),
-      React.createElement(PlayList, { list: this.state.list })
+      React.createElement(
+        "ul",
+        null,
+        list.map((song, index) => {
+          return React.createElement(Song, { song: song, key: index, onSelect: this.setUrl, index: index });
+        })
+      )
     );
+  }
+});
+
+var Audio = React.createClass({
+  displayName: "Audio",
+
+
+  render: function () {
+
+    return React.createElement("audio", { src: this.props.url });
   }
 });
 

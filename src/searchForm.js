@@ -29,28 +29,18 @@ var SearchForm = React.createClass({
 })
 
 var Song = React.createClass({
+  select: function(e){
+    this.props.onSelect(e.target.src);
+  },
   render: function(){
     var song = this.props.song,
       index = this.props.index;
 
     return (
-      <li>{index} | {song.title}</li>
-    )
-  }
-})
-
-var PlayList = React.createClass({
-  render: function(){
-    var list = this.props.list;
-
-    return (
-      <div>
-        <ul>
-          {list.map((song, index) => {
-            return <Song song={song} key={index} index={index} />;
-          })}
-        </ul>
-      </div>
+      <li>
+        <input type="button" onClick = {this.select} src = {song.url} value = '>' />
+        {index} | {song.title}
+      </li>
     )
   }
 })
@@ -62,13 +52,21 @@ var Player = React.createClass({
       searchStr:'Miracle of Sound',
       list: [],
       url: '',
-      state: 'stop'
+      state: 'stop',
     };
   },
 
 
   setList: function (list) {
     this.setState({list:list});
+  },
+
+  setUrl: function (url) {
+    this.setState({url: url});
+    setTimeout(function(){
+        document.getElementsByTagName('audio')[0].play();
+    },500);
+
   },
 
   changeSearch: function (string) {
@@ -96,13 +94,18 @@ var Player = React.createClass({
       console.log('error', arguments);
     })
   },
-  doStop:function(){console.log('doStop')},
-  doPause:function(){console.log('doPause')},
+  doStop:function(){
+    console.log('doStop')
+    document.getElementsByTagName('audio')[0].pause();
+  },
+  doPause:function(){
+    console.log('doPause')
+    document.getElementsByTagName('audio')[0].play();
+  },
   doNext:function(){console.log('doNext')},
   doPrew:function(){console.log('doPrew')},
   addListeners: function () {
     var element = document.getElementsByTagName('body')[0];
-    console.log(this.doStop);
     element.addEventListener('STOP', this.doStop);
     element.addEventListener('PAUSE', this.doPause);
     element.addEventListener('NEXT', this.doNext);
@@ -110,12 +113,29 @@ var Player = React.createClass({
   },
   render: function() {
     this.addListeners()
+    var list = this.state.list
     return (
       <div>
+        <Audio url = {this.state.url} />
+
         <SearchForm onChange = {this.changeSearch} searchStr = {this.state.searchStr} />
 
-        <PlayList list = {this.state.list} />
+        <ul>
+          {list.map((song, index) => {
+            return <Song song={song} key={index} onSelect = {this.setUrl} index= {index} />;
+          })}
+        </ul>
       </div>
+    )
+  }
+});
+
+var Audio = React.createClass({
+
+  render: function(){
+
+    return (
+      <audio src={this.props.url} ></audio>
     )
   }
 });
